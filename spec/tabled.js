@@ -54,6 +54,34 @@ describe('tabled', function(){
       expect(table.headers[1]).to.equal("data");
     });
 
+    it('captures tbody element to construct rows', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Test</th>" +
+          "<th>Data</th>" +
+        "</tr>";
+      self.table.appendChild(thead);
+
+      var tbody = document.createElement("tbody");
+      tbody.innerHTML =
+        "<tr>" +
+          "<td>Foo</td>" +
+          "<td>Bar</td>" +
+        "</tr>"
+
+      self.table.appendChild(tbody);
+
+      var table = tabled.create(self.table);
+
+      var rows = table.element.getElementsByTagName("tbody")[0]
+        .getElementsByTagName("tr");
+
+      expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("Foo");
+      expect(rows[0].getElementsByTagName("td")[1].innerText).to.equal("Bar");
+    });
+
     it('uses custom provided schema to construct headers', function() {
       var self = this;
       var thead = document.createElement("thead");

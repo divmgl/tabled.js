@@ -42,14 +42,30 @@
       }
     }
 
+    var __data = opts.data || [];
+
     var tbody = element.getElementsByTagName("tbody")[0];
-    if (!tbody) {
+    if (tbody) {
+      var tr = tbody.getElementsByTagName("tr");
+      var item = {};
+
+      for (var i = 0; i < tr.length; i++) {
+        var td = tr[i].getElementsByTagName("td");
+        for (var j = 0; j < td.length; j++){
+          var headerProp = this.headers[j];
+          if (!headerProp) continue;
+          item[headerProp] = td.innerText;
+        }
+      }
+      
+      __data.push(item);
+    } else {
       tbody = document.createElement("tbody");
       element.appendChild(tbody);
     }
 
     var self = this;
-    var __data = opts.data || [];
+
     var __subset = [];
 
     this.update = function() {

@@ -1,7 +1,7 @@
 {
   "name": "tabled",
   "version": "0.1.0",
-  "description": "Additional functionality for HTML tables",
+  "description": "Data-driven HTML tables with vanilla JavaScript",
   "main": "src\\index.js",
   "dependencies": {},
   "devDependencies": {
