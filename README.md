@@ -67,7 +67,7 @@ your schema. Assuming your table looks like the latter, your schema now looks
 like this:
 
 ```javascript
-[ "firstName", "lastName", "age" ]
+table.headers = [ "firstName", "lastName", "age" ]
 ```
 
 The table can now be populated.
@@ -81,7 +81,7 @@ var table  = tabled.create(document.getElementByTag("table")[0], {
 });
 ```
 
-You can also update the table.
+You can also update the table and it will adjust automatically.
 
 ```javascript
 table.data = [
@@ -89,4 +89,11 @@ table.data = [
 ]
 ```
 
-The table will adjust automatically.
+## Tests
+
+The test suite is on Node.js and uses PhantomJS with Mocha.
+
+```bash
+$ npm install -g
+$ npm test
+```

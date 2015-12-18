@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "mocha-phantomjs spec/headless.html",
-    "watch": "watch \"mocha-phantomjs spec/headless.html\" spec src"
+    "watch": "watch \"npm test\" spec src"
   },
   "repository": {
     "type": "git",

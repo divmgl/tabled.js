@@ -1,0 +1,6 @@
+language: node_js
+install:
+  - mkdir src
+  - ln -s ../tabled.js index.js
+node_js:
+  - "5.3"
