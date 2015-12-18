@@ -7,11 +7,11 @@ Data-driven HTML tables with vanilla JavaScript
 ```html
 <table>
   <thead>
-    <th>
-      <td>First Name</td>
-      <td>Last Name</td>
-      <td>Age</td>
-    </th>
+    <tr>
+      <th>First Name</td>
+      <th>Last Name</td>
+      <th>Age</td>
+    </tr>
   </thead>
   <tbody>
     <tr>

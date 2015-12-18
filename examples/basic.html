@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>First Name</td>
+          <th>Last Name</td>
+          <th>Age</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>John</td>
+          <td>Smith</td>
+          <td>29</td>
+        </tr>
+        <tr>
+          <td>Jane</td>
+          <td>Doe</td>
+          <td>26</td>
+        </tr>
+      </tbody>
+    </table>
+    <script src="../tabled.js"></script>
+    <script>
+      var table = tabled.create(document.getElementsByTagName("table")[0]);
+
+      function switchPage(pagenum) {
+        table.page(pagenum);
+      }
+    </script>
+  </body>
+</html>

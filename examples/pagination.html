@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <table>
+      <thead>
+        <th>First Name</th> <!-- Column index 0 -->
+        <th>Last Name</th>  <!-- Column index 1 -->
+        <th>Age</th>        <!-- Column index 2 -->
+      </thead>
+    </table>
+    <div id="pages">
+      <a href="#" onclick="switchPage(1)">1</a>
+      &nbsp;
+      <a href="#" onclick="switchPage(2)">2</a>
+    </div>
+    <script src="../tabled.js"></script>
+    <script>
+      var table = tabled.create(document.getElementsByTagName("table")[0], {
+        data: [
+          { firstName: "John", lastName: "Doe", age: "28" },
+          { firstName: "Jane", lastName: "Doe", age: "21" },
+          { firstName: "David", lastName: "Doe", age: "58" },
+          { firstName: "Mike", lastName: "Doe", age: "42" },
+          { firstName: "Paul", lastName: "Doe", age: "63" },
+          { firstName: "Jason", lastName: "Doe", age: "35" },
+          { firstName: "Jose", lastName: "Doe", age: "37" },
+          { firstName: "Alex", lastName: "Doe", age: "24" },
+          { firstName: "Matt", lastName: "Doe", age: "12" },
+          { firstName: "Chad", lastName: "Doe", age: "75" },
+          { firstName: "Ernest", lastName: "Doe", age: "23" }
+        ]
+      });
+      
+      function switchPage(pagenum) {
+        table.page(pagenum);
+      }
+    </script>
+  </body>
+</html>

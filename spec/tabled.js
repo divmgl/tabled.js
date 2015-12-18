@@ -99,64 +99,66 @@ describe('tabled', function(){
       expect(table.headers.length).to.equal(4);
     })
 
-    it('constructs rows when schema built from thead', function() {
-      var self = this;
-      var thead = document.createElement("thead");
-      thead.innerHTML =
-        "<tr>" +
-          "<th>Test</th>" +
-          "<th>Data</th>" +
-        "</tr>";
-      self.table.insertBefore(thead, self.table.firstChild);
+    it('constructs rows when schema built from thead with data options',
+      function() {
+        var self = this;
+        var thead = document.createElement("thead");
+        thead.innerHTML =
+          "<tr>" +
+            "<th>Test</th>" +
+            "<th>Data</th>" +
+          "</tr>";
+        self.table.insertBefore(thead, self.table.firstChild);
 
-      var table = tabled.create(self.table);
+        var table = tabled.create(self.table, {
+          data: [{
+            "test": "HAI",
+            "data": "GURL"
+          }, {
+            "data": "HAI",
+            "test": "BOI"
+          }]
+        });
 
-      table.data = [{
-        "test": "HAI",
-        "data": "GURL"
-      }, {
-        "data": "HAI",
-        "test": "BOI"
-      }];
+        var rows = table.element.getElementsByTagName("tbody")[0]
+          .getElementsByTagName("tr");
 
-      var rows = table.element.getElementsByTagName("tbody")[0]
-        .getElementsByTagName("tr");
+        expect(rows.length).to.equal(2);
+        expect(rows[0].getElementsByTagName("td").length).to.equal(2);
 
-      expect(rows.length).to.equal(2);
-      expect(rows[0].getElementsByTagName("td").length).to.equal(2);
-
-      expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("HAI");
-      expect(rows[0].getElementsByTagName("td")[1].innerText).to.equal("GURL");
-      expect(rows[1].getElementsByTagName("td")[0].innerText).to.equal("BOI");
-      expect(rows[1].getElementsByTagName("td")[1].innerText).to.equal("HAI");
-    });
-
-    it('constructs rows when schema built from provided schema', function(){
-      var self = this;
-      var thead = document.createElement("thead");
-      thead.innerHTML =
-        "<tr>" +
-          "<th>Test</th>" +
-          "<th>Data</th>" +
-        "</tr>";
-      self.table.insertBefore(thead, self.table.firstChild);
-
-      var table = tabled.create(self.table, {
-        headers: [ "foo", "bar" ]
+        expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("HAI");
+        expect(rows[0].getElementsByTagName("td")[1].innerText).to.equal("GURL");
+        expect(rows[1].getElementsByTagName("td")[0].innerText).to.equal("BOI");
+        expect(rows[1].getElementsByTagName("td")[1].innerText).to.equal("HAI");
       });
 
-      table.data = [{
-        "foo": "234",
-        "bar": "123"
-      }];
+    it('constructs rows when schema built from provided schema and data assignment',
+      function(){
+        var self = this;
+        var thead = document.createElement("thead");
+        thead.innerHTML =
+          "<tr>" +
+            "<th>Test</th>" +
+            "<th>Data</th>" +
+          "</tr>";
+        self.table.insertBefore(thead, self.table.firstChild);
 
-      var rows = table.element.getElementsByTagName("tbody")[0]
-        .getElementsByTagName("tr");
+        var table = tabled.create(self.table, {
+          headers: [ "foo", "bar" ]
+        });
 
-      expect(rows.length).to.equal(1);
-      expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("234");
-      expect(rows[0].getElementsByTagName("td")[1].innerText).to.equal("123");
-    });
+        table.data = [{
+          "foo": "234",
+          "bar": "123"
+        }];
+
+        var rows = table.element.getElementsByTagName("tbody")[0]
+          .getElementsByTagName("tr");
+
+        expect(rows.length).to.equal(1);
+        expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("234");
+        expect(rows[0].getElementsByTagName("td")[1].innerText).to.equal("123");
+      });
   });
 
   describe('pagination', function() {

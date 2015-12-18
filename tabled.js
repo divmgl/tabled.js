@@ -34,6 +34,8 @@
     this.headers = opts.headers || [];
     this.pageSize = opts.pageSize || 5;
     this.currentPage = opts.defaultPage || 1;
+    var __data = opts.data || [];
+    var self = this;
 
     if (theadRow && !opts.headers) {
       var ths = theadRow.getElementsByTagName("th");
@@ -42,44 +44,12 @@
       }
     }
 
-    var __data = opts.data || [];
-
-    var tbody = element.getElementsByTagName("tbody")[0];
-    if (tbody) {
-      var tr = tbody.getElementsByTagName("tr");
-      var item = {};
-
-      for (var i = 0; i < tr.length; i++) {
-        var td = tr[i].getElementsByTagName("td");
-        for (var j = 0; j < td.length; j++){
-          var headerProp = this.headers[j];
-          if (!headerProp) continue;
-          item[headerProp] = td.innerText;
-        }
-      }
-      
-      __data.push(item);
-    } else {
-      tbody = document.createElement("tbody");
-      element.appendChild(tbody);
-    }
-
-    var self = this;
-
-    var __subset = [];
-
-    this.update = function() {
-      __subset = self.data
-        .slice((self.currentPage - 1) * self.pageSize, self.data.length);
-    }
-
     Object.defineProperty(this, 'data', {
       get: function() {
         return __data;
       },
       set: function(val) {
         __data = val;
-        self.update();
         self.draw();
       }
     });
@@ -92,9 +62,35 @@
 
     Object.defineProperty(this, 'subset', {
       get: function() {
-        return __subset;
+        return self.data
+          .slice((self.currentPage - 1) * self.pageSize, self.data.length);
       }
-    })
+    });
+
+    var tbody = element.getElementsByTagName("tbody")[0];
+
+    if (tbody) {
+      var tr = tbody.getElementsByTagName("tr");
+      var items = [];
+
+      for (var i = 0; i < tr.length; i++) {
+        var item = {};
+        var td = tr[i].getElementsByTagName("td");
+        for (var j = 0; j < td.length; j++){
+          var headerProp = this.headers[j];
+          if (!headerProp) continue;
+          item[headerProp] = td[j].innerText;
+        }
+        items.push(item);
+      }
+
+      this.data = items;
+    } else {
+      tbody = document.createElement("tbody");
+      element.appendChild(tbody);
+    }
+
+    this.draw();
   }
 
   Table.prototype.draw = function() {
@@ -125,7 +121,6 @@
 
   Table.prototype.page = function(pagenum) {
     this.currentPage = pagenum || 1;
-    this.update();
     this.draw();
   }
 
