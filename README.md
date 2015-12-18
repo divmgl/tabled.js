@@ -97,3 +97,7 @@ The test suite is on Node.js and uses PhantomJS with Mocha.
 $ npm install -g
 $ npm test
 ```
+
+## License
+
+MIT
