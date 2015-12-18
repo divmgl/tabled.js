@@ -157,9 +157,34 @@ describe('tabled', function(){
       expect(rows[3].getElementsByTagName("td")[0].innerText).to.equal("t4");
       expect(rows[4].getElementsByTagName("td")[0].innerText).to.equal("t5");
     });
-  });
 
-  describe('pagination', function() {
+    it('gets available pages', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Foo</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
+
+      var table = tabled.create(self.table);
+
+      table.data = [{ "foo": "t1" }, { "foo": "t2" }, { "foo": "t3" },
+        { "foo": "t4" }, { "foo": "t5" }, { "foo": "t6" }, { "foo": "t7" },
+        { "foo": "t8" }, { "foo": "t9" }, { "foo": "t10" }];
+
+      expect(table.availablePages).to.equal(2);
+
+      table.data = [{ "foo": "t1" }, { "foo": "t2" }, { "foo": "t3" },
+        { "foo": "t4" }, { "foo": "t5" }, { "foo": "t6" }, { "foo": "t7" },
+        { "foo": "t8" }, { "foo": "t9" }, { "foo": "t10" }, { "foo": "t1" },
+        { "foo": "t2" }, { "foo": "t3" }, { "foo": "t4" }, { "foo": "t5" },
+        { "foo": "t6" }, { "foo": "t7" }, { "foo": "t8" }, { "foo": "t9" },
+        { "foo": "t10" }];
+
+      expect(table.availablePages).to.equal(4);
+    });
+
     it('goes to next five items', function() {
       var self = this;
       var thead = document.createElement("thead");
@@ -185,7 +210,33 @@ describe('tabled', function(){
       expect(rows[1].getElementsByTagName("td")[0].innerText).to.equal("t7");
       expect(rows[2].getElementsByTagName("td")[0].innerText).to.equal("t8");
       expect(rows[3].getElementsByTagName("td")[0].innerText).to.equal("t9");
-      expect(rows[4].getElementsByTagName("td")[0].innerText).to.equal("t0");
+      expect(rows[4].getElementsByTagName("td")[0].innerText).to.equal("t10");
+    });
+
+    it('does not crash on imperfect matches', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Foo</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
+
+      var table = tabled.create(self.table, {
+        data: [{ "foo": "t1" }, { "foo": "t2" }, { "foo": "t3" },
+          { "foo": "t4" }, { "foo": "t5" }, { "foo": "t6" }, { "foo": "t7" },
+          { "foo": "t8" }]
+      });
+
+      table.page(2);
+
+      var rows = table.element.getElementsByTagName("tbody")[0]
+        .getElementsByTagName("tr");
+
+      expect(rows.length).to.equal(3);
+      expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("t6");
+      expect(rows[1].getElementsByTagName("td")[0].innerText).to.equal("t7");
+      expect(rows[2].getElementsByTagName("td")[0].innerText).to.equal("t8");
     });
   });
 });

@@ -32,7 +32,6 @@
 
     opts = opts || {};
     this.headers = opts.headers || [];
-    this.data = opts.data || [];
     this.pageSize = opts.pageSize || 5;
     this.currentPage = opts.defaultPage || 1;
 
@@ -50,7 +49,13 @@
     }
 
     var self = this;
-    var __data = {};
+    var __data = opts.data || [];
+    var __subset = [];
+
+    this.update = function() {
+      __subset = self.data
+        .slice((self.currentPage - 1) * self.pageSize, self.data.length);
+    }
 
     Object.defineProperty(this, 'data', {
       get: function() {
@@ -58,25 +63,38 @@
       },
       set: function(val) {
         __data = val;
+        self.update();
         self.draw();
       }
     });
+
+    Object.defineProperty(this, 'availablePages', {
+      get: function() {
+        return Math.floor(self.data.length / self.pageSize)
+      }
+    });
+
+    Object.defineProperty(this, 'subset', {
+      get: function() {
+        return __subset;
+      }
+    })
   }
 
   Table.prototype.draw = function() {
     var tbody = this.element.getElementsByTagName("tbody")[0];
     tbody.innerHTML = "";
 
-    var shownCount = this.pageSize < this.data.length
+    var shownCount = this.pageSize < this.subset.length
       ? this.pageSize
-      : this.data.length;
+      : this.subset.length;
 
     for(var i = 0; i < shownCount; i++){
       var tr = document.createElement("tr");
       var row = [];
 
       for(var j = 0; j < this.headers.length; j++) {
-        if (this.data[i][this.headers[j]]) row.push(this.data[i][this.headers[j]]);
+        if (this.subset[i][this.headers[j]]) row.push(this.subset[i][this.headers[j]]);
         else row.push("");
       }
 
@@ -89,8 +107,10 @@
     }
   }
 
-  Table.prototype.page = function() {
-
+  Table.prototype.page = function(pagenum) {
+    this.currentPage = pagenum || 1;
+    this.update();
+    this.draw();
   }
 
   tabled = {
