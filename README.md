@@ -1,5 +1,7 @@
 # tabled
 
+[![Build Status](https://travis-ci.org/divmgl/tabled.svg)](https://travis-ci.org/divmgl/tabled)
+
 Data-driven HTML tables with vanilla JavaScript
 
 ## Usage
