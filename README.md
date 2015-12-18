@@ -4,13 +4,13 @@ Data-driven HTML tables with vanilla JavaScript
 
 ## Installation
 
-```
-$ npm install betabled
+```bash
+$ npm install html-tabled
 ```
 
 ## Usage
 
-```
+```html
 <table>
   <thead>
     <th>
@@ -32,6 +32,14 @@ $ npm install betabled
     </tr>
   </tbody>
 </table>
+<script>
+  tabled.create(document.getElementByTag("table")[0]);
+</script>
+```
 
+You can also use it through UMD.
+
+```javascript
+var tabled = require('html-tabled');
 tabled.create(document.getElementByTag("table")[0]);
 ```
