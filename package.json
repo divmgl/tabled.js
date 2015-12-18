@@ -1,0 +1,29 @@
+{
+  "name": "tabled",
+  "version": "0.1.0",
+  "description": "Additional functionality for HTML tables",
+  "main": "src\\index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
+  },
+  "scripts": {
+    "test": "mocha-phantomjs spec/headless.html",
+    "watch": "watch \"mocha-phantomjs spec/headless.html\" spec src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/divmgl/tabled.git"
+  },
+  "keywords": [
+    "html",
+    "table"
+  ],
+  "author": "Dexter Miguel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/divmgl/tabled/issues"
+  },
+  "homepage": "https://github.com/divmgl/tabled#readme"
+}
