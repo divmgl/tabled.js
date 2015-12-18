@@ -6,11 +6,13 @@
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.4.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "mocha-phantomjs": "^4.0.1",
+    "watch-run": "^1.2.4"
   },
   "scripts": {
     "test": "mocha-phantomjs spec/headless.html",
-    "watch": "watch \"npm test\" spec src"
+    "watch": "watch-run -i \"npm test\" spec tabled.js"
   },
   "repository": {
     "type": "git",
