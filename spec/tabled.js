@@ -271,6 +271,108 @@ describe('tabled', function(){
     });
   });
 
+  describe('filtering', function() {
+    it('should filter by value', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Foo</th>" +
+          "<th>Bar</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
+
+      var table = tabled.create(self.table, {
+        data: [
+          { "foo": "abc", "bar": "456" },
+          { "foo": "789", "bar": "" },
+          { "foo": "456", "bar": "789" },
+          { "foo": "bar", "bar": "foo" }
+        ]
+      });
+
+      table.filter("ABC");
+      var rows = table.element.getElementsByTagName("tbody")[0]
+        .getElementsByTagName("tr");
+      var links = table.paginationElement.getElementsByTagName("a");
+
+      expect(rows.length).to.equal(1);
+      expect(links.length).to.equal(5);
+      expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("abc");
+      expect(links[2].innerText).to.equal("1");
+    });
+
+    it('should have correct links', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Foo</th>" +
+          "<th>Bar</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
+
+      var table = tabled.create(self.table, {
+        data: [
+          { "foo": "abc", "bar": "456" },
+          { "foo": "789", "bar": "" },
+          { "foo": "456", "bar": "789" },
+          { "foo": "bar", "bar": "foo" },
+          { "foo": "abc", "bar": "456" },
+          { "foo": "789", "bar": "" },
+          { "foo": "456", "bar": "789" },
+          { "foo": "bar", "bar": "foo" },
+          { "foo": "bar", "bar": "foo" },
+          { "foo": "abc", "bar": "456" },
+          { "foo": "789", "bar": "" },
+          { "foo": "456", "bar": "789" },
+          { "foo": "bar", "bar": "foo" }
+        ]
+      });
+
+      table.filter("ABC");
+      var links = table.paginationElement.getElementsByTagName("a");
+
+      expect(links.length).to.equal(5);
+    });
+
+    it('should unfilter on empty value after initially filtering', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Foo</th>" +
+          "<th>Bar</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
+
+      var table = tabled.create(self.table, {
+        data: [
+          { "foo": "abc", "bar": "456" },
+          { "foo": "789", "bar": "" },
+          { "foo": "456", "bar": "789" },
+          { "foo": "bar", "bar": "foo" },
+          { "foo": "abc", "bar": "456" },
+          { "foo": "789", "bar": "" },
+          { "foo": "456", "bar": "789" },
+          { "foo": "bar", "bar": "foo" }
+        ]
+      });
+
+      table.filter("123");
+      table.filter(null);
+
+      var rows = table.element.getElementsByTagName("tbody")[0]
+        .getElementsByTagName("tr");
+      var links = table.paginationElement.getElementsByTagName("a");
+
+      expect(rows.length).to.equal(5);
+      expect(links.length).to.equal(6);
+      expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("abc");
+      expect(links[3].innerText).to.equal("2");
+    });
+  });
+
   describe('dom builder', function() {
     it('finds pagination element', function() {
       var self = this;
@@ -289,9 +391,29 @@ describe('tabled', function(){
 
       var links = table.paginationElement.getElementsByTagName("a");
 
-      expect(links.length).to.equal(2);
-      expect(links[0].innerText).to.equal("1");
-      expect(links[1].innerText).to.equal("2");
+      expect(links.length).to.equal(6);
+      expect(links[2].innerText).to.equal("1");
+      expect(links[3].innerText).to.equal("2");
+      expect(table.paginationElement.style.display).to.equal("");
+    });
+
+    it('hides pagination element when specified in options', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Foo</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
+
+      var table = tabled.create(self.table, {
+        data: [{ "foo": "t1" }, { "foo": "t2" }, { "foo": "t3" },
+          { "foo": "t4" }, { "foo": "t5" }, { "foo": "t6" }, { "foo": "t7" },
+          { "foo": "t8" }],
+        showPagination: false
+      });
+
+      expect(table.paginationElement.style.display).to.equal("none");
     });
 
     describe('page links', function() {
@@ -311,7 +433,7 @@ describe('tabled', function(){
         });
 
         var links = table.paginationElement.getElementsByTagName("a");
-        links[1].onclick();
+        links[3].onclick();
 
         var rows = table.element.getElementsByTagName("tbody")[0]
           .getElementsByTagName("tr");

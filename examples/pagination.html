@@ -10,6 +10,7 @@
         <th>Age</th>        <!-- Column index 2 -->
       </thead>
     </table>
+    <input type="text" placeholder="Search" oninput="filter(event);" />
     <script src="../tabled.js"></script>
     <script>
       var table = tabled.create(document.getElementsByTagName("table")[0], {
@@ -28,8 +29,8 @@
         ]
       });
 
-      function switchPage(pagenum) {
-        table.page(pagenum);
+      function filter(event) {
+        table.filter(event.target.value)
       }
     </script>
   </body>

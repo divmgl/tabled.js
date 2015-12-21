@@ -34,9 +34,13 @@
     this.headers = opts.headers || [];
     this.pageSize = opts.pageSize || 5;
     this.currentPage = opts.defaultPage || 1;
-    this.showPagination = opts.showPagination || true;
+    this.showPagination =
+      opts.showPagination === false
+      ? false
+      : true;
 
     var __data = opts.data || [];
+    var __filtered = null;
     var self = this;
 
     if (theadRow && !opts.headers) {
@@ -48,7 +52,7 @@
 
     Object.defineProperty(this, 'data', {
       get: function() {
-        return __data;
+        return __filtered || __data;
       },
       set: function(val) {
         __data = val;
@@ -68,6 +72,28 @@
           .slice((self.currentPage - 1) * self.pageSize, self.data.length);
       }
     });
+
+    this.filter = function(val) {
+      var filtered = [];
+
+      if (!!val) {
+        for (var i = 0; i < __data.length; i++) {
+          var match = false;
+          for(var prop in __data[i]) {
+            if (!__data[i].hasOwnProperty(prop)) continue;
+            var value = __data[i][prop];
+            var regex = new RegExp(val, "i");
+            if (regex.test(value)) match = true;
+          }
+          if (match) filtered.push(__data[i]);
+        }
+      } else {
+        filtered = __data;
+      }
+
+      __filtered = filtered;
+      self.draw();
+    }
 
     var tbody = element.getElementsByTagName("tbody")[0];
 
@@ -121,8 +147,8 @@
       tbody.appendChild(tr);
     }
 
-
-    this.paginationElement = document.createElement("div");
+    if (!this.paginationElement)
+      this.paginationElement = document.createElement("div");
     this.paginationElement.id = "pagination";
 
     if (this.element.nextSibling.id !== "pagination")
@@ -135,7 +161,21 @@
 
     var self = this;
 
-    for(var i = 0; i < this.availablePages; i++) (function(x) {
+    var firstLink = document.createElement("a");
+    firstLink.innerHTML = "First";
+    firstLink.onclick = function() {
+      self.page(1);
+    }
+    var previousLink = document.createElement("a");
+    previousLink.innerHTML = "Previous";
+    previousLink.onclick = function() {
+      self.page(self.currentPage - 1);
+    }
+
+    this.paginationElement.appendChild(firstLink);
+    this.paginationElement.appendChild(previousLink);
+
+    for(var i = 0; i < (this.availablePages || 1); i++) (function(x) {
       var link = document.createElement("a");
       link.innerHTML = x + 1;
       link.onclick = function () {
@@ -144,6 +184,22 @@
 
       self.paginationElement.appendChild(link);
     })(i);
+
+    var nextLink = document.createElement("a");
+    nextLink.innerHTML = "Next";
+    nextLink.onclick = function() {
+      self.page(self.currentPage + 1);
+    }
+    var lastLink = document.createElement("a");
+    lastLink.innerHTML = "Last";
+    lastLink.onclick = function() {
+      self.page(self.availablePages);
+    }
+
+    this.paginationElement.appendChild(nextLink);
+    this.paginationElement.appendChild(lastLink);
+
+    if (!this.showPagination) this.paginationElement.style.display = "none";
   }
 
   Table.prototype.page = function(pagenum) {
