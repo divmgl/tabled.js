@@ -10,11 +10,6 @@
         <th>Age</th>        <!-- Column index 2 -->
       </thead>
     </table>
-    <div id="pages">
-      <a href="#" onclick="switchPage(1)">1</a>
-      &nbsp;
-      <a href="#" onclick="switchPage(2)">2</a>
-    </div>
     <script src="../tabled.js"></script>
     <script>
       var table = tabled.create(document.getElementsByTagName("table")[0], {
@@ -32,7 +27,7 @@
           { firstName: "Ernest", lastName: "Doe", age: "23" }
         ]
       });
-      
+
       function switchPage(pagenum) {
         table.page(pagenum);
       }

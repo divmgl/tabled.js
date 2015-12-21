@@ -4,7 +4,7 @@ beforeEach(function() {
 });
 
 describe('tabled', function(){
-  describe('basic functionality', function () {
+  describe('bootstrap', function () {
     it('returns an object', function() {
       window.tabled.should.not.equal(null);
     });
@@ -122,43 +122,44 @@ describe('tabled', function(){
 
         var rows = table.element.getElementsByTagName("tbody")[0]
           .getElementsByTagName("tr");
+        var firstRow = rows[0].getElementsByTagName("td");
+        var secondRow = rows[1].getElementsByTagName("td");
 
         expect(rows.length).to.equal(2);
-        expect(rows[0].getElementsByTagName("td").length).to.equal(2);
-
-        expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("HAI");
-        expect(rows[0].getElementsByTagName("td")[1].innerText).to.equal("GURL");
-        expect(rows[1].getElementsByTagName("td")[0].innerText).to.equal("BOI");
-        expect(rows[1].getElementsByTagName("td")[1].innerText).to.equal("HAI");
+        expect(firstRow.length).to.equal(2);
+        expect(firstRow[0].innerText).to.equal("HAI");
+        expect(firstRow[1].innerText).to.equal("GURL");
+        expect(secondRow[0].innerText).to.equal("BOI");
+        expect(secondRow[1].innerText).to.equal("HAI");
       });
 
-    it('constructs rows when schema built from provided schema and data assignment',
-      function(){
-        var self = this;
-        var thead = document.createElement("thead");
-        thead.innerHTML =
-          "<tr>" +
-            "<th>Test</th>" +
-            "<th>Data</th>" +
-          "</tr>";
-        self.table.insertBefore(thead, self.table.firstChild);
+    it('constructs rows when schema built from provided schema and data '
+      + 'assignment', function(){
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Test</th>" +
+          "<th>Data</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
 
-        var table = tabled.create(self.table, {
-          headers: [ "foo", "bar" ]
-        });
-
-        table.data = [{
-          "foo": "234",
-          "bar": "123"
-        }];
-
-        var rows = table.element.getElementsByTagName("tbody")[0]
-          .getElementsByTagName("tr");
-
-        expect(rows.length).to.equal(1);
-        expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("234");
-        expect(rows[0].getElementsByTagName("td")[1].innerText).to.equal("123");
+      var table = tabled.create(self.table, {
+        headers: [ "foo", "bar" ]
       });
+
+      table.data = [{
+        "foo": "234",
+        "bar": "123"
+      }];
+
+      var rows = table.element.getElementsByTagName("tbody")[0]
+        .getElementsByTagName("tr");
+
+      expect(rows.length).to.equal(1);
+      expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("234");
+      expect(rows[0].getElementsByTagName("td")[1].innerText).to.equal("123");
+    });
   });
 
   describe('pagination', function() {
@@ -267,6 +268,107 @@ describe('tabled', function(){
       expect(rows[0].getElementsByTagName("td")[0].innerText).to.equal("t6");
       expect(rows[1].getElementsByTagName("td")[0].innerText).to.equal("t7");
       expect(rows[2].getElementsByTagName("td")[0].innerText).to.equal("t8");
+    });
+  });
+
+  describe('dom builder', function() {
+    it('finds pagination element', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Foo</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
+
+      var table = tabled.create(self.table, {
+        data: [{ "foo": "t1" }, { "foo": "t2" }, { "foo": "t3" },
+          { "foo": "t4" }, { "foo": "t5" }, { "foo": "t6" }, { "foo": "t7" },
+          { "foo": "t8" }]
+      });
+
+      var links = table.paginationElement.getElementsByTagName("a");
+
+      expect(links.length).to.equal(2);
+      expect(links[0].innerText).to.equal("1");
+      expect(links[1].innerText).to.equal("2");
+    });
+
+    describe('page links', function() {
+      it('changes pages when clicked', function() {
+        var self = this;
+        var thead = document.createElement("thead");
+        thead.innerHTML =
+          "<tr>" +
+            "<th>Foo</th>" +
+          "</tr>";
+        self.table.insertBefore(thead, self.table.firstChild);
+
+        var table = tabled.create(self.table, {
+          data: [{ "foo": "t1" }, { "foo": "t2" }, { "foo": "t3" },
+            { "foo": "t4" }, { "foo": "t5" }, { "foo": "t6" }, { "foo": "t7" },
+            { "foo": "t8" }]
+        });
+
+        var links = table.paginationElement.getElementsByTagName("a");
+        links[1].onclick();
+
+        var rows = table.element.getElementsByTagName("tbody")[0]
+          .getElementsByTagName("tr");
+        var firstRow = rows[0].getElementsByTagName("td");
+
+        expect(firstRow[0].innerText).to.equal("t6");
+      });
+
+      it('changes back to the original pages', function() {
+        var self = this;
+        var thead = document.createElement("thead");
+        thead.innerHTML =
+          "<tr>" +
+            "<th>Foo</th>" +
+          "</tr>";
+        self.table.insertBefore(thead, self.table.firstChild);
+
+        var table = tabled.create(self.table, {
+          data: [{ "foo": "t1" }, { "foo": "t2" }, { "foo": "t3" },
+            { "foo": "t4" }, { "foo": "t5" }, { "foo": "t6" }, { "foo": "t7" },
+            { "foo": "t8" }]
+        });
+
+        var links = table.paginationElement.getElementsByTagName("a");
+        links[1].onclick();
+        links[0].onclick();
+
+        var rows = table.element.getElementsByTagName("tbody")[0]
+          .getElementsByTagName("tr");
+        var firstRow = rows[0].getElementsByTagName("td");
+
+        expect(firstRow[0].innerText).to.equal("t1");
+      });
+    });
+
+    it('does not insert duplicate pagination nodes', function() {
+      var self = this;
+      var thead = document.createElement("thead");
+      thead.innerHTML =
+        "<tr>" +
+          "<th>Foo</th>" +
+        "</tr>";
+      self.table.insertBefore(thead, self.table.firstChild);
+
+      var table = tabled.create(self.table, {
+        data: [{ "foo": "t1" }, { "foo": "t2" }, { "foo": "t3" },
+          { "foo": "t4" }, { "foo": "t5" }, { "foo": "t6" }, { "foo": "t7" },
+          { "foo": "t8" }]
+      });
+
+      table.draw();
+
+      var paginationElement = table.element.nextSibling;
+      var nextElement = paginationElement.nextSibling;
+
+      expect(paginationElement.id).to.equal("pagination");
+      expect(nextElement.id).to.not.equal("pagination");
     });
   });
 });

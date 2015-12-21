@@ -12,6 +12,7 @@
   },
   "scripts": {
     "test": "mocha-phantomjs spec/headless.html",
+    "minify": "uglifyjs --output dist/tabled.min.js tabled.js",    
     "watch": "watch-run -i \"npm test\" spec tabled.js"
   },
   "repository": {

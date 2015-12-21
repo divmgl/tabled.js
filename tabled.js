@@ -34,6 +34,8 @@
     this.headers = opts.headers || [];
     this.pageSize = opts.pageSize || 5;
     this.currentPage = opts.defaultPage || 1;
+    this.showPagination = opts.showPagination || true;
+
     var __data = opts.data || [];
     var self = this;
 
@@ -56,7 +58,7 @@
 
     Object.defineProperty(this, 'availablePages', {
       get: function() {
-        return Math.floor(self.data.length / self.pageSize)
+        return Math.ceil(self.data.length / self.pageSize)
       }
     });
 
@@ -106,7 +108,8 @@
       var row = [];
 
       for(var j = 0; j < this.headers.length; j++) {
-        if (this.subset[i][this.headers[j]]) row.push(this.subset[i][this.headers[j]]);
+        if (this.subset[i][this.headers[j]])
+          row.push(this.subset[i][this.headers[j]]);
         else row.push("");
       }
 
@@ -117,6 +120,30 @@
       }
       tbody.appendChild(tr);
     }
+
+
+    this.paginationElement = document.createElement("div");
+    this.paginationElement.id = "pagination";
+
+    if (this.element.nextSibling.id !== "pagination")
+      this.element.parentNode.insertBefore(
+        this.paginationElement,
+        this.element.nextSibling
+      );
+
+    this.paginationElement.innerHTML = '';
+
+    var self = this;
+
+    for(var i = 0; i < this.availablePages; i++) (function(x) {
+      var link = document.createElement("a");
+      link.innerHTML = x + 1;
+      link.onclick = function () {
+        self.page(x + 1);
+      };
+
+      self.paginationElement.appendChild(link);
+    })(i);
   }
 
   Table.prototype.page = function(pagenum) {
