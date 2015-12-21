@@ -91,6 +91,30 @@ table.data = [
 ]
 ```
 
+### Interacting with `tabled`
+
+You can toggle between pages by calling `page` and specifying a page number.
+
+```javascript
+table.page(1);
+```
+
+You can also filter by a string by calling `filter`. Filtering is
+case-insensitive.
+
+```javascript
+table.filter("john");
+```
+
+## Roadmap
+
+Feel free to open a pull-request and contribute to the development of
+`tabled`. Currently, these items are on the roadmap.
+
+* Hidden elements
+* Column ordering
+* Case-sensitive filtering
+
 ## Tests
 
 The test suite is on Node.js and uses PhantomJS with Mocha.
