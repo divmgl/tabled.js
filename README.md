@@ -1,6 +1,6 @@
 # tabled.js
 
-[![Build Status](https://travis-ci.org/divmgl/tabled.svg)](https://travis-ci.org/divmgl/tabled)
+[![Build Status](https://travis-ci.org/divmgl/tabled.js.svg?branch=master)](https://travis-ci.org/divmgl/tabled.js)
 
 Data-driven HTML tables with vanilla JavaScript
 
