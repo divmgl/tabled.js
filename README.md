@@ -1,4 +1,4 @@
-# tabled
+# tabled.js
 
 [![Build Status](https://travis-ci.org/divmgl/tabled.svg)](https://travis-ci.org/divmgl/tabled)
 
@@ -91,7 +91,7 @@ table.data = [
 ]
 ```
 
-### Interacting with `tabled`
+### Interacting with `tabled.js`
 
 You can toggle between pages by calling `page` and specifying a page number.
 
@@ -109,7 +109,7 @@ table.filter("john");
 ## Roadmap
 
 Feel free to open a pull-request and contribute to the development of
-`tabled`. Currently, these items are on the roadmap.
+`tabled.js`. Currently, these items are on the roadmap.
 
 * Hidden elements
 * Column ordering

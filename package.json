@@ -1,6 +1,6 @@
 {
-  "name": "html-tabled",
-  "version": "0.2.2",
+  "name": "tabledjs",
+  "version": "0.2.3",
   "description": "Data-driven HTML tables with vanilla JavaScript",
   "main": "dist/tabled.min.js",
   "dependencies": {},
