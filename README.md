@@ -37,11 +37,11 @@ Data-driven HTML tables with vanilla JavaScript
 ### UMD
 
 ```bash
-$ npm install html-tabled
+$ npm install tabledjs
 ```
 
 ```javascript
-var tabled = require('html-tabled');
+var tabled = require('tabledjs');
 tabled.create(document.getElementByTag("table")[0]);
 ```
 
@@ -75,7 +75,7 @@ table.headers = [ "firstName", "lastName", "age" ]
 The table can now be populated.
 
 ```javascript
-var tabled = require('html-tabled');
+var tabled = require('tabledjs');
 var table  = tabled.create(document.getElementByTag("table")[0], {
   data: [
     { firstName: "John", lastName: "Doe", age: "28" }
