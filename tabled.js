@@ -17,9 +17,9 @@
   var camelize = function(str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
       if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
-      return index == 0 ? match.toLowerCase() : match.toUpperCase();
+      return index === 0 ? match.toLowerCase() : match.toUpperCase();
     });
-  }
+  };
 
   var Table = function(element, opts) {
     if (!element) throw noElementFoundError;
@@ -34,18 +34,16 @@
     this.headers = opts.headers || [];
     this.pageSize = opts.pageSize || 5;
     this.currentPage = opts.defaultPage || 1;
-    this.showPagination =
-      opts.showPagination === false
-      ? false
-      : true;
+    this.showPagination = opts.showPagination === true;
 
     var __data = opts.data || [];
     var __filtered = null;
     var self = this;
+    var i;
 
     if (theadRow && !opts.headers) {
       var ths = theadRow.getElementsByTagName("th");
-      for(var i = 0; i < ths.length; i++) {
+      for(i = 0; i < ths.length; i++) {
         this.headers.push(camelize(ths[i].innerText));
       }
     }
@@ -62,7 +60,7 @@
 
     Object.defineProperty(this, 'availablePages', {
       get: function() {
-        return Math.ceil(self.data.length / self.pageSize)
+        return Math.ceil(self.data.length / self.pageSize);
       }
     });
 
@@ -93,7 +91,7 @@
 
       __filtered = filtered;
       self.draw();
-    }
+    };
 
     var tbody = element.getElementsByTagName("tbody")[0];
 
@@ -101,7 +99,7 @@
       var tr = tbody.getElementsByTagName("tr");
       var items = [];
 
-      for (var i = 0; i < tr.length; i++) {
+      for (i = 0; i < tr.length; i++) {
         var item = {};
         var td = tr[i].getElementsByTagName("td");
         for (var j = 0; j < td.length; j++){
@@ -119,28 +117,28 @@
     }
 
     this.draw();
-  }
+  };
 
   Table.prototype.draw = function() {
+    var i, j, td;
     var tbody = this.element.getElementsByTagName("tbody")[0];
     tbody.innerHTML = "";
 
-    var shownCount = this.pageSize < this.subset.length
-      ? this.pageSize
+    var shownCount = this.pageSize < this.subset.length ? this.pageSize
       : this.subset.length;
 
-    for(var i = 0; i < shownCount; i++){
+    for(i = 0; i < shownCount; i++){
       var tr = document.createElement("tr");
       var row = [];
 
-      for(var j = 0; j < this.headers.length; j++) {
+      for(j = 0; j < this.headers.length; j++) {
         if (this.subset[i][this.headers[j]])
           row.push(this.subset[i][this.headers[j]]);
         else row.push("");
       }
 
-      for(var j = 0; j < row.length; j++) {
-        var td = document.createElement("td");
+      for(j = 0; j < row.length; j++) {
+        td = document.createElement("td");
         td.innerHTML = row[j];
         tr.appendChild(td);
       }
@@ -165,17 +163,17 @@
     firstLink.innerHTML = "First";
     firstLink.onclick = function() {
       self.page(1);
-    }
+    };
     var previousLink = document.createElement("a");
     previousLink.innerHTML = "Previous";
     previousLink.onclick = function() {
       self.page(self.currentPage - 1);
-    }
+    };
 
     this.paginationElement.appendChild(firstLink);
     this.paginationElement.appendChild(previousLink);
 
-    for(var i = 0; i < (this.availablePages || 1); i++) (function(x) {
+    for(i = 0; i < (this.availablePages || 1); i++) (function(x) {
       var link = document.createElement("a");
       link.innerHTML = x + 1;
       link.onclick = function () {
@@ -189,23 +187,23 @@
     nextLink.innerHTML = "Next";
     nextLink.onclick = function() {
       self.page(self.currentPage + 1);
-    }
+    };
     var lastLink = document.createElement("a");
     lastLink.innerHTML = "Last";
     lastLink.onclick = function() {
       self.page(self.availablePages);
-    }
+    };
 
     this.paginationElement.appendChild(nextLink);
     this.paginationElement.appendChild(lastLink);
 
     if (!this.showPagination) this.paginationElement.style.display = "none";
-  }
+  };
 
   Table.prototype.page = function(pagenum) {
     this.currentPage = pagenum || 1;
     this.draw();
-  }
+  };
 
   tabled = {
     create: function(element, opts) {
