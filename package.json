@@ -6,12 +6,12 @@
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.4.1",
+    "jsdom": "^8.1.0",
     "mocha": "^2.3.4",
-    "mocha-phantomjs": "^4.0.1",
-    "watch-run": "^1.2.4"
+    "onchange": "^2.1.2"
   },
   "scripts": {
-    "test": "mocha-phantomjs spec/headless.html",
+    "test": "mocha spec/headless.html",
     "minify": "uglifyjs --output dist/tabled.min.js tabled.js",
     "watch": "watch-run -i \"npm test\" spec tabled.js"
   },
